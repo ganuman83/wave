@@ -2,13 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Wave</title>
 <link rel="stylesheet" href="assets/css/app.css"/>
 <link rel="manifest" href="manifest.json"/>
 <meta name="theme-color" content="#080808"/>
 <link rel="icon" href="icons/wave-icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/wave-icon-180.png"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 </head>
 <body>
 
@@ -16,7 +19,6 @@
 
   <!-- ── Sidebar ── -->
   <aside class="sidebar" id="sidebar">
-
     <div class="sidebar-brand">
       <div class="sidebar-logo">
         <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,11 +32,11 @@
     </div>
 
     <nav class="sidebar-nav">
-      <div class="nav-item active" onclick="goHome()">
+      <div class="nav-item active" onclick="goHome(); closeSidebar()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Home
       </div>
-      <div class="nav-item" onclick="goLiked()">
+      <div class="nav-item" onclick="goLiked(); closeSidebar()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         Liked Songs
       </div>
@@ -71,22 +73,37 @@
     <!-- Top bar -->
     <div class="topbar">
       <button class="hamburger" onclick="toggleSidebar()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
       </button>
 
       <div class="search-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="search-input" id="searchInput" type="search" placeholder="Search songs, artists, albums…"/>
+        <input class="search-input" id="searchInput" type="search" placeholder="Search songs, artists…"/>
       </div>
 
+      <!-- Desktop category tabs -->
       <div class="cat-tabs">
-        <button class="cat-tab active" data-cat="All" onclick="setCat('All')">All</button>
-        <button class="cat-tab" data-cat="Hindi" onclick="setCat('Hindi')">Hindi</button>
-        <button class="cat-tab" data-cat="English" onclick="setCat('English')">English</button>
-        <button class="cat-tab" data-cat="Marathi" onclick="setCat('Marathi')">Marathi</button>
-        <button class="cat-tab" data-cat="Gym" onclick="setCat('Gym')">Gym</button>
-        <button class="cat-tab" data-cat="God" onclick="setCat('God')">God</button>
+        <button class="cat-tab active" data-cat="All"     onclick="setCat('All')">All</button>
+        <button class="cat-tab" data-cat="Hindi"          onclick="setCat('Hindi')">Hindi</button>
+        <button class="cat-tab" data-cat="English"        onclick="setCat('English')">English</button>
+        <button class="cat-tab" data-cat="Marathi"        onclick="setCat('Marathi')">Marathi</button>
+        <button class="cat-tab" data-cat="Gym"            onclick="setCat('Gym')">Gym</button>
+        <button class="cat-tab" data-cat="God"            onclick="setCat('God')">God</button>
       </div>
+    </div>
+
+    <!-- Mobile category chips (horizontal scroll row, below topbar) -->
+    <div class="cat-chips-row" id="catChipsRow">
+      <button class="cat-tab active" data-cat="All"     onclick="setCat('All')">All</button>
+      <button class="cat-tab" data-cat="Hindi"          onclick="setCat('Hindi')">Hindi</button>
+      <button class="cat-tab" data-cat="English"        onclick="setCat('English')">English</button>
+      <button class="cat-tab" data-cat="Marathi"        onclick="setCat('Marathi')">Marathi</button>
+      <button class="cat-tab" data-cat="Gym"            onclick="setCat('Gym')">Gym</button>
+      <button class="cat-tab" data-cat="God"            onclick="setCat('God')">God</button>
     </div>
 
     <!-- Scrollable content -->
@@ -98,10 +115,8 @@
     </div>
   </main>
 
-  <!-- ── Player bar ── -->
+  <!-- ── Desktop Player bar ── -->
   <footer class="player-bar">
-
-    <!-- Song info -->
     <div class="player-song">
       <div class="player-thumb" id="playerThumb">
         <div class="player-thumb-placeholder">🎵</div>
@@ -115,7 +130,6 @@
       </button>
     </div>
 
-    <!-- Controls -->
     <div class="player-controls">
       <div class="controls-row">
         <button class="ctrl-btn" id="shuffleBtn" onclick="toggleShuffle()" title="Shuffle">
@@ -134,7 +148,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
         </button>
       </div>
-
       <div class="progress-row">
         <span class="time-label" id="timeNow">0:00</span>
         <div class="progress-track" id="progressTrack">
@@ -145,22 +158,75 @@
       </div>
     </div>
 
-    <!-- Extras -->
     <div class="player-extras">
       <button class="speed-btn" id="speedBtn" onclick="cycleSpeed()" title="Playback speed">1x</button>
-
       <div class="volume-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         <input class="volume-slider" id="volumeSlider" type="range" min="0" max="100" value="80"/>
       </div>
-
       <button class="ctrl-btn" onclick="toggleQueue()" title="Queue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       </button>
     </div>
   </footer>
 
+</div><!-- end app-shell -->
+
+<!-- ════════════════════════════════════════
+     MOBILE MINI PLAYER — fixed above bottom nav
+════════════════════════════════════════ -->
+<div class="mobile-mini-player" id="miniPlayer">
+  <!-- thin red progress bar at very top of mini player -->
+  <div class="mini-progress">
+    <div class="mini-progress-fill" id="miniProgressFill"></div>
+  </div>
+
+  <div class="mini-thumb" id="miniThumb">
+    <div class="mini-thumb-placeholder">🎵</div>
+  </div>
+
+  <div class="mini-info">
+    <div class="mini-title" id="miniTitle">No song playing</div>
+    <div class="mini-meta"  id="miniMeta">—</div>
+  </div>
+
+  <div class="mini-controls">
+    <button class="mini-like-btn" id="miniLikeBtn" onclick="playerLike()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <button class="mini-btn" onclick="prevSong()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 20L9 12l10-8v16z"/><line x1="5" y1="4" x2="5" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <button class="mini-play-btn" id="miniPlayBtn" onclick="togglePlay()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <button class="mini-btn" onclick="nextSong()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 4l10 8-10 8V4z"/><line x1="19" y1="4" x2="19" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
 </div>
+
+<!-- ════════════════════════════════════════
+     MOBILE BOTTOM NAV — Spotify style 4-tab
+════════════════════════════════════════ -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav">
+  <div class="mob-nav-item active" id="mobNavHome" onclick="goHome(); setMobNav('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </div>
+  <div class="mob-nav-item" id="mobNavSearch" onclick="focusMobSearch(); setMobNav('search')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span>Search</span>
+  </div>
+  <div class="mob-nav-item" id="mobNavLiked" onclick="goLiked(); setMobNav('liked')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span>Liked</span>
+  </div>
+  <div class="mob-nav-item" id="mobNavLibrary" onclick="toggleSidebar()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    <span>Library</span>
+  </div>
+</nav>
 
 <!-- Queue panel -->
 <div class="queue-panel" id="queuePanel">
@@ -173,8 +239,8 @@
   <div class="queue-list" id="queueList"></div>
 </div>
 
-<!-- Sidebar overlay (mobile) -->
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<!-- Sidebar overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
 <!-- Context menu -->
 <div class="ctx-menu" id="ctxMenu"></div>
@@ -192,12 +258,76 @@
 </div>
 
 <script>
+  // ── Service Worker ──
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js')
         .catch(err => console.warn('SW registration failed:', err));
     });
   }
+
+  // ── Mobile helpers ──
+  window.setMobNav = function(tab) {
+    document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.remove('active'));
+    const map = { home: 'mobNavHome', search: 'mobNavSearch', liked: 'mobNavLiked', library: 'mobNavLibrary' };
+    if (map[tab]) document.getElementById(map[tab]).classList.add('active');
+  };
+
+  window.focusMobSearch = function() {
+    const inp = document.getElementById('searchInput');
+    if (inp) { inp.focus(); inp.select(); }
+  };
+
+  window.closeSidebar = function() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+  };
+
+  // ── Sync category chips: when one tab is clicked, match the other set ──
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const cat = tab.dataset.cat;
+        document.querySelectorAll('.cat-tab').forEach(t => {
+          t.classList.toggle('active', t.dataset.cat === cat);
+        });
+      });
+    });
+  });
+
+  // ── Mini player updater (called from player.js / app.js) ──
+  window._updateMiniPlayer = function({ song, paused, liked, progress } = {}) {
+    if (!song) return;
+
+    // Thumbnail
+    const th = document.getElementById('miniThumb');
+    th.innerHTML = song.thumbnailUrl
+      ? `<img src="${song.thumbnailUrl}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;">`
+      : `<div class="mini-thumb-placeholder">🎵</div>`;
+
+    // Title / meta
+    document.getElementById('miniTitle').textContent = song.title  || '';
+    document.getElementById('miniMeta').textContent  = song.singer || song.album || '';
+
+    // Play / pause icon
+    document.getElementById('miniPlayBtn').innerHTML = paused
+      ? `<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M8 5v14l11-7z"/></svg>`
+      : `<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+    // Like button
+    const lb = document.getElementById('miniLikeBtn');
+    if (lb) {
+      lb.classList.toggle('liked', !!liked);
+      lb.innerHTML = liked
+        ? `<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+    }
+
+    // Progress bar
+    if (progress !== undefined) {
+      document.getElementById('miniProgressFill').style.width = Math.min(100, progress) + '%';
+    }
+  };
 </script>
 
 <script type="module" src="assets/js/app.js"></script>
