@@ -976,3 +976,4 @@ html, body {
   .modal { width: 100%; max-width: 100%; border-radius: 20px 20px 0 0; padding: 20px 18px 32px; transform: translateY(20px); }
   .modal-overlay.open .modal { transform: translateY(0); }
 }
+
