@@ -415,6 +415,7 @@ function setupPlayer() {
   player.on('play', updatePlayerUI);
   player.on('pause', () => {
     document.getElementById('playPauseBtn').innerHTML = playIcon();
+    syncMiniPlayer(true);
   });
   player.on('timeupdate', updateProgress);
   player.on('loading', s => {
@@ -448,6 +449,7 @@ function updatePlayerUI(song) {
 
   updatePlayerLikeBtn();
   updateQueueUI();
+  syncMiniPlayer(false);
 }
 
 function updatePlayerLikeBtn() {
@@ -457,6 +459,12 @@ function updatePlayerLikeBtn() {
   const liked = likedIds.has(song.id);
   btn.classList.toggle('liked', liked);
   btn.innerHTML = `<svg viewBox="0 0 24 24" ${liked ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-width="2"'}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+  // sync mini like btn
+  const mlb = document.getElementById('miniLikeBtn');
+  if (mlb) {
+    mlb.classList.toggle('liked', liked);
+    mlb.innerHTML = btn.innerHTML;
+  }
 }
 
 function updateProgress() {
@@ -465,6 +473,9 @@ function updateProgress() {
   document.getElementById('progressThumb').style.right = (100 - pct) + '%';
   document.getElementById('timeNow').textContent  = fmt(player.currentTime);
   document.getElementById('timeTot').textContent  = fmt(player.duration);
+  // sync mini progress bar every tick
+  const mpf = document.getElementById('miniProgressFill');
+  if (mpf) mpf.style.width = pct + '%';
 }
 
 function fmt(s) {
@@ -561,3 +572,17 @@ function playIcon()  { return `<svg viewBox="0 0 24 24" fill="currentColor"><pat
 function pauseIcon() { return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`; }
 
 export { allSongs, likedIds, playlists, currentUser, isAdmin };
+
+// ── Mini player sync (mobile) ─────────────────────────────────────────
+function syncMiniPlayer(paused) {
+  if (typeof window._updateMiniPlayer !== 'function') return;
+  const song = player.currentSong;
+  if (!song) return;
+  const pct = player.duration ? (player.currentTime / player.duration) * 100 : 0;
+  window._updateMiniPlayer({
+    song,
+    paused: paused !== undefined ? paused : !player.isPlaying,
+    liked: likedIds.has(song.id),
+    progress: pct
+  });
+}
