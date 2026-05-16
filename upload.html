@@ -283,9 +283,25 @@ audioInput.addEventListener('change', () => {
   audioInput.value = '';
 });
 
+const MAX_CLOUDINARY_BYTES = 10 * 1024 * 1024; // 10MB Cloudinary free limit
+
 function setAudio(file) {
   audioFile = file;
-  document.getElementById('audioPreview').textContent = `✓ ${file.name}  (${fmtSize(file.size)})`;
+
+  const preview = document.getElementById('audioPreview');
+  const tooBig  = file.size > MAX_CLOUDINARY_BYTES;
+
+  if (tooBig) {
+    const overBy = fmtSize(file.size - MAX_CLOUDINARY_BYTES);
+    preview.innerHTML = `⚠️ <span style="color:#ff8fa3">${file.name} (${fmtSize(file.size)}) — ${overBy} over 10MB limit.<br>
+      Please compress to 128kbps first using 
+      <a href="https://www.mp3smaller.com" target="_blank" style="color:#E8001C">mp3smaller.com</a> 
+      then re-select the file.</span>`;
+    audioFile = null; // block upload
+  } else {
+    preview.textContent = `✓ ${file.name}  (${fmtSize(file.size)})`;
+  }
+
   // Auto-fill title if empty
   if (!document.getElementById('songTitle').value) {
     document.getElementById('songTitle').value = file.name.replace(/\.(mp3|m4a|aac|ogg|wav|flac)$/i, '');
