@@ -586,3 +586,4 @@ function syncMiniPlayer(paused) {
     progress: pct
   });
 }
+
