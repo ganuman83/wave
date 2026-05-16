@@ -1,0 +1,36 @@
+{
+  "name": "Wave",
+  "short_name": "Wave",
+  "description": "Your private encrypted music player",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#080808",
+  "orientation": "any",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "icons/wave-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/wave-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "My Music",
+      "short_name": "Music",
+      "description": "Open Wave music library",
+      "url": "./app.html",
+      "icons": [{ "src": "icons/wave-icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "categories": ["music", "entertainment"],
+  "lang": "en"
+}
